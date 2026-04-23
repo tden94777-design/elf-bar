@@ -6,8 +6,8 @@
 
 body {
     font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
+    background: white;
+    color: black;
     padding: 20px;
 }
 
@@ -18,13 +18,11 @@ body {
 
 h1 {
     text-align: center;
-    color: white;
+    color: black;
     font-size: 28px;
     margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Вкладки */
 .tabs {
     display: flex;
     gap: 10px;
@@ -34,19 +32,19 @@ h1 {
 .tab-btn {
     flex: 1;
     padding: 12px;
-    background: rgba(255,255,255,0.2);
-    border: none;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
     border-radius: 12px;
-    color: white;
+    color: black;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s;
 }
 
 .tab-btn.active {
-    background: white;
-    color: #667eea;
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
 }
 
 .tab-content {
@@ -57,39 +55,31 @@ h1 {
     display: block;
 }
 
-/* Карточки */
-.card {
-    background: white;
+.card, .category-card {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
     border-radius: 16px;
     padding: 20px;
     margin-bottom: 16px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.category-card {
-    background: white;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 16px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 .category-card h2 {
-    color: #333;
+    color: black;
     margin-bottom: 15px;
     font-size: 20px;
     border-left: 4px solid #667eea;
     padding-left: 12px;
 }
 
-/* Формы */
 input, button {
     width: 100%;
     padding: 12px;
     margin-bottom: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
     border-radius: 10px;
     font-size: 16px;
+    background: white;
+    color: black;
 }
 
 button {
@@ -98,18 +88,15 @@ button {
     border: none;
     cursor: pointer;
     font-weight: bold;
-    transition: all 0.3s;
 }
 
 button:hover {
     background: #5a67d8;
-    transform: translateY(-2px);
 }
 
 button:disabled {
     background: #ccc;
     cursor: not-allowed;
-    transform: none;
 }
 
 .green {
@@ -128,9 +115,9 @@ button:disabled {
     background: #dc2626;
 }
 
-/* Товары */
 .add-item-form {
-    background: #f8f9fa;
+    background: white;
+    border: 1px solid #e5e7eb;
     padding: 15px;
     border-radius: 12px;
     margin-bottom: 15px;
@@ -138,6 +125,7 @@ button:disabled {
 
 .item-card {
     border: 1px solid #e5e7eb;
+    background: white;
     padding: 15px;
     border-radius: 12px;
     margin-bottom: 10px;
@@ -145,14 +133,12 @@ button:disabled {
 
 .item-name {
     font-weight: bold;
-    font-size: 16px;
     margin-bottom: 8px;
-    color: #333;
 }
 
 .item-prices {
     font-size: 14px;
-    color: #6b7280;
+    color: #4b5563;
     margin-bottom: 5px;
 }
 
@@ -174,7 +160,7 @@ button:disabled {
 }
 
 .total-box {
-    background: #dbeafe;
+    background: #e0e7ff;
     text-align: center;
     padding: 15px;
     border-radius: 12px;
@@ -183,40 +169,35 @@ button:disabled {
     font-size: 18px;
 }
 
-/* Финансы */
 .finance-item {
     display: flex;
     justify-content: space-between;
     padding: 12px;
-    background: #f3f4f6;
+    background: white;
+    border: 1px solid #e5e7eb;
     border-radius: 10px;
     margin-bottom: 8px;
 }
 
 .finance-item.profit {
     background: #d1fae5;
-    color: #10b981;
+    color: #065f46;
 }
 
 .finance-item.cash {
     background: #dbeafe;
-    color: #3b82f6;
+    color: #1e40af;
 }
 
-/* Касса */
 .cash-buttons {
     display: flex;
     gap: 10px;
     margin-top: 10px;
 }
 
-.cash-buttons button {
-    flex: 1;
-}
-
-/* История операций */
 .transaction {
     border: 1px solid #e5e7eb;
+    background: white;
     padding: 12px;
     border-radius: 10px;
     margin-bottom: 8px;
@@ -234,20 +215,254 @@ button:disabled {
     font-weight: bold;
 }
 
-.transaction-amount {
-    font-size: 16px;
-    margin-bottom: 4px;
+.delete-trans {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    background: #ef4444;
+    border-radius: 8px;
+    font-size: 14px;
 }
 
-.transaction-note {
-    font-size: 12px;
+.empty {
+    text-align: center;
     color: #6b7280;
+    padding: 20px;
 }
 
-.transaction-date {
-    font-size: 10px;
-    color: #9ca3af;
-    margin-top: 4px;
+label {
+    display: block;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+@media (max-width: 640px) {
+    body {
+        padding: 12px;
+    }
+    input, button {
+        font-size: 16px;
+    }
+}* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: white;
+    color: black;
+    padding: 20px;
+}
+
+#app {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+    color: black;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 12px;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.tab-btn.active {
+    background: #667eea;
+    color: white;
+    border-color: #667eea;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.card, .category-card {
+    background: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.category-card h2 {
+    color: black;
+    margin-bottom: 15px;
+    font-size: 20px;
+    border-left: 4px solid #667eea;
+    padding-left: 12px;
+}
+
+input, button {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 16px;
+    background: white;
+    color: black;
+}
+
+button {
+    background: #667eea;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #5a67d8;
+}
+
+button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.green {
+    background: #10b981;
+}
+
+.green:hover {
+    background: #059669;
+}
+
+.red {
+    background: #ef4444;
+}
+
+.red:hover {
+    background: #dc2626;
+}
+
+.add-item-form {
+    background: white;
+    border: 1px solid #e5e7eb;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 15px;
+}
+
+.item-card {
+    border: 1px solid #e5e7eb;
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+
+.item-name {
+    font-weight: bold;
+    margin-bottom: 8px;
+}
+
+.item-prices {
+    font-size: 14px;
+    color: #4b5563;
+    margin-bottom: 5px;
+}
+
+.item-qty {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.item-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.item-buttons button {
+    flex: 1;
+    padding: 8px;
+    font-size: 18px;
+}
+
+.total-box {
+    background: #e0e7ff;
+    text-align: center;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.finance-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    margin-bottom: 8px;
+}
+
+.finance-item.profit {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.finance-item.cash {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.cash-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.transaction {
+    border: 1px solid #e5e7eb;
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    position: relative;
+    padding-right: 40px;
+}
+
+.transaction.add .transaction-amount {
+    color: #10b981;
+    font-weight: bold;
+}
+
+.transaction.withdraw .transaction-amount {
+    color: #ef4444;
+    font-weight: bold;
 }
 
 .delete-trans {
@@ -263,13 +478,9 @@ button:disabled {
     font-size: 14px;
 }
 
-.delete-trans:hover {
-    background: #dc2626;
-}
-
 .empty {
     text-align: center;
-    color: #9ca3af;
+    color: #6b7280;
     padding: 20px;
 }
 
@@ -278,25 +489,13 @@ label {
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 5px;
-    color: #333;
 }
 
-/* Адаптив для телефона */
 @media (max-width: 640px) {
     body {
         padding: 12px;
     }
-    
     input, button {
         font-size: 16px;
-    }
-    
-    .tabs {
-        gap: 8px;
-    }
-    
-    .tab-btn {
-        padding: 10px;
-        font-size: 14px;
     }
 }
