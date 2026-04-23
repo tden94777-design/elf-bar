@@ -34,10 +34,10 @@
         <div id="finances" class="tab-content">
             <div class="card">
                 <h2>Финансовый отчёт</h2>
-                <div class="finance-item">💸 Вложено в товары: <span id="totalInvested">0</span> ₽</div>
-                <div class="finance-item">💰 Потенциальная выручка: <span id="totalValue">0</span> ₽</div>
-                <div class="finance-item profit">📈 Потенциальная прибыль: <span id="potentialProfit">0</span> ₽</div>
-                <div class="finance-item cash">💵 Текущие деньги в кассе: <span id="currentCash">0</span> ₽</div>
+                <div class="finance-item">💸 Вложено в товары: <span id="totalInvested">0</span> €</div>
+                <div class="finance-item">💰 Потенциальная выручка: <span id="totalValue">0</span> €</div>
+                <div class="finance-item profit">📈 Потенциальная прибыль: <span id="potentialProfit">0</span> €</div>
+                <div class="finance-item cash">💵 Текущие деньги в кассе: <span id="currentCash">0</span> €</div>
             </div>
         </div>
 
@@ -48,7 +48,7 @@
                 <label>Начальный остаток:</label>
                 <input type="number" id="initialCash" value="0">
                 
-                <input type="number" id="cashAmount" placeholder="Сумма">
+                <input type="number" id="cashAmount" placeholder="Сумма (€)">
                 <input type="text" id="cashNote" placeholder="Примечание">
                 
                 <div class="cash-buttons">
@@ -116,17 +116,23 @@
                 
                 return `
                     <div class="category-card">
-                        <h2>${escapeHtml(cat.name)}</h2>
+                        <div class="category-header">
+                            <h2>${escapeHtml(cat.name)}</h2>
+                            <button class="delete-cat-btn" onclick="deleteCategory(${cat.id})">🗑️</button>
+                        </div>
                         <div class="add-item-form">
                             <input type="text" placeholder="Новый товар" id="itemName_${cat.id}">
-                            <input type="number" placeholder="Цена закупки" id="purchasePrice_${cat.id}">
-                            <input type="number" placeholder="Цена продажи" id="salePrice_${cat.id}">
+                            <input type="number" placeholder="Цена закупки (€)" id="purchasePrice_${cat.id}">
+                            <input type="number" placeholder="Цена продажи (€)" id="salePrice_${cat.id}">
                             <button onclick="addItem(${cat.id})">+ Добавить товар</button>
                         </div>
                         ${cat.items.map(item => `
                             <div class="item-card">
-                                <div class="item-name">${escapeHtml(item.name)}</div>
-                                <div class="item-prices">💰 Закупка: ${item.purchasePrice} ₽ | 💵 Продажа: ${item.salePrice} ₽</div>
+                                <div class="item-header">
+                                    <div class="item-name">${escapeHtml(item.name)}</div>
+                                    <button class="delete-item-btn" onclick="deleteItem(${cat.id}, ${item.id})">🗑️</button>
+                                </div>
+                                <div class="item-prices">💰 Закупка: ${item.purchasePrice} € | 💵 Продажа: ${item.salePrice} €</div>
                                 <div class="item-qty">📦 Количество: ${item.qty} шт.</div>
                                 <div class="item-buttons">
                                     <button onclick="changeQty(${cat.id}, ${item.id}, -1)" ${item.qty === 0 ? 'disabled' : ''}>-</button>
@@ -172,7 +178,7 @@
             
             container.innerHTML = cashTransactions.map(t => `
                 <div class="transaction ${t.type}">
-                    <div class="transaction-amount">${t.type === 'add' ? '+' : '-'} ${t.amount.toLocaleString()} ₽</div>
+                    <div class="transaction-amount">${t.type === 'add' ? '+' : '-'} ${t.amount.toLocaleString()} €</div>
                     <div class="transaction-note">${escapeHtml(t.note) || '—'}</div>
                     <div class="transaction-date">${t.date}</div>
                     <button class="delete-trans" onclick="deleteTransaction(${t.id})">✖</button>
@@ -187,6 +193,14 @@
             if (name) {
                 categories.push({ id: nextCatId++, name, items: [] });
                 input.value = "";
+                saveData();
+                renderAll();
+            }
+        }
+
+        function deleteCategory(catId) {
+            if (confirm("Удалить категорию и все товары в ней?")) {
+                categories = categories.filter(c => c.id !== catId);
                 saveData();
                 renderAll();
             }
@@ -215,6 +229,17 @@
                 }
             } else {
                 alert("Заполните все поля (цена закупки и продажи > 0)");
+            }
+        }
+
+        function deleteItem(catId, itemId) {
+            if (confirm("Удалить этот товар?")) {
+                const cat = categories.find(c => c.id === catId);
+                if (cat) {
+                    cat.items = cat.items.filter(i => i.id !== itemId);
+                    saveData();
+                    renderAll();
+                }
             }
         }
 
