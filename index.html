@@ -3,651 +3,662 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Складской учёт</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Varastonhallinta</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #fff;
+            padding: 16px;
+        }
+        .app {
+            max-width: 550px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+        .tab-btn {
+            background: #1e1e2e;
+            border: none;
+            color: #ccc;
+            padding: 8px 12px;
+            border-radius: 40px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            flex: 1;
+            min-width: 65px;
+            text-align: center;
+        }
+        .tab-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .card {
+            background: #121212;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #2a2a2a;
+        }
+        input, button, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #1e1e2e;
+            border: 1px solid #2a2a2a;
+            border-radius: 14px;
+            color: white;
+            font-size: 14px;
+        }
+        button {
+            background: #3b82f6;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:active { transform: scale(0.97); }
+        .green { background: #10b981; }
+        .red { background: #ef4444; }
+        .small-btn {
+            width: auto;
+            padding: 6px 14px;
+            font-size: 12px;
+        }
+        .category-card {
+            background: #121212;
+            border-radius: 18px;
+            padding: 14px;
+            margin-bottom: 14px;
+            border: 1px solid #2a2a2a;
+        }
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .category-header h2 {
+            font-size: 18px;
+            border-left: 3px solid #3b82f6;
+            padding-left: 10px;
+        }
+        .item-card {
+            background: #1a1a1a;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .item-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            justify-content: center;
+        }
+        .item-buttons button {
+            margin: 0;
+            padding: 8px;
+            font-size: 12px;
+            flex: 1;
+        }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+        .kpi-card {
+            background: #121212;
+            border-radius: 18px;
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #2a2a2a;
+        }
+        .kpi-value {
+            font-size: 22px;
+            font-weight: 700;
+            margin: 6px 0;
+        }
+        .trend-up { color: #10b981; }
+        .trend-down { color: #ef4444; }
+        .period-selector {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            justify-content: center;
+        }
+        .period-btn {
+            background: #1e1e2e;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            width: auto;
+            margin: 0;
+        }
+        .period-btn.active {
+            background: #3b82f6;
+        }
+        .finance-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #2a2a2a;
+        }
+        .finance-item:last-child { border: none; }
+        .transactions-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
+        .transaction {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 14px;
+            margin-bottom: 8px;
+            border-left: 3px solid;
+        }
+        .transaction.add { border-left-color: #10b981; }
+        .transaction.withdraw { border-left-color: #ef4444; }
+        .transaction-checkbox {
+            width: 18px;
+            height: 18px;
+            margin: 0;
+        }
+        .transaction-info { flex: 1; }
+        .transaction-amount { font-weight: 700; }
+        .transaction-note { font-size: 11px; color: #aaa; }
+        .transaction-date { font-size: 9px; color: #666; }
+        .delete-trans, .delete-sale-btn, .delete-note-btn {
+            background: #ef4444;
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        .sale-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 14px;
+            margin-bottom: 8px;
+            border-left: 3px solid #10b981;
+        }
+        .note-item {
+            background: #1a1a1a;
+            border-radius: 14px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .total-box {
+            background: #1a3a5c;
+            text-align: center;
+            padding: 12px;
+            border-radius: 18px;
+            margin-bottom: 16px;
+            font-weight: bold;
+        }
+        @media (max-width: 480px) {
+            .kpi-grid { gap: 8px; }
+            .tab-btn { font-size: 11px; padding: 6px 8px; min-width: 55px; }
+            .item-buttons { flex-direction: column; }
+        }
+    </style>
 </head>
 <body>
-    <div id="app">
-        <h1>📦 Складской учёт</h1>
-        
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="inventory">Товары</button>
-            <button class="tab-btn" data-tab="finances">Финансы</button>
-            <button class="tab-btn" data-tab="cash">Касса</button>
+<div class="app">
+    <h1>📦 Varastonhallinta</h1>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="inventory">📦 Товары</button>
+        <button class="tab-btn" data-tab="stats">📊 Статистика</button>
+        <button class="tab-btn" data-tab="finances">💰 Финансы</button>
+        <button class="tab-btn" data-tab="cash">💵 Касса</button>
+        <button class="tab-btn" data-tab="profit">📈 Прибыль</button>
+        <button class="tab-btn" data-tab="calendar">📅 Календарь</button>
+    </div>
+
+    <div id="inventory" class="tab-content active">
+        <div class="card">
+            <input type="text" id="catName" placeholder="Новая категория">
+            <button id="addCategoryBtn">+ Добавить категорию</button>
         </div>
+        <div class="total-box">📦 Общий остаток: <span id="totalQty">0</span> шт.</div>
+        <div id="categoriesList"></div>
+    </div>
 
-        <!-- Вкладка Товары -->
-        <div id="inventory" class="tab-content active">
-            <div class="card">
-                <input type="text" id="catName" placeholder="Новая категория">
-                <button id="addCategoryBtn">+ Добавить категорию</button>
+    <div id="stats" class="tab-content">
+        <div class="card">
+            <div class="period-selector">
+                <button class="period-btn active" data-period="day">День</button>
+                <button class="period-btn" data-period="week">Неделя</button>
+                <button class="period-btn" data-period="month">Месяц</button>
             </div>
-
-            <div class="total-box">
-                📦 Общий остаток: <span id="totalQty">0</span> шт.
+            <div class="kpi-grid">
+                <div class="kpi-card"><div>💰 Выручка</div><div class="kpi-value" id="statRevenue">0 €</div><div class="trend" id="trendRevenue"></div></div>
+                <div class="kpi-card"><div>📈 Прибыль</div><div class="kpi-value" id="statProfit">0 €</div><div class="trend" id="trendProfit"></div></div>
+                <div class="kpi-card"><div>📦 Продано</div><div class="kpi-value" id="statCount">0 шт</div><div class="trend" id="trendCount"></div></div>
+                <div class="kpi-card"><div>🧾 Средний чек</div><div class="kpi-value" id="statAvg">0 €</div><div class="trend" id="trendAvg"></div></div>
+                <div class="kpi-card"><div>📉 Маржа</div><div class="kpi-value" id="statMargin">0%</div><div class="trend" id="trendMargin"></div></div>
             </div>
-
-            <div id="categoriesList"></div>
-        </div>
-
-        <!-- Вкладка Финансы -->
-        <div id="finances" class="tab-content">
-            <div class="card">
-                <h2>Финансовый отчёт</h2>
-                <div class="finance-item">💸 Вложено в товары: <span id="totalInvested">0</span> €</div>
-                <div class="finance-item">💰 Потенциальная выручка: <span id="totalValue">0</span> €</div>
-                <div class="finance-item profit">📈 Потенциальная прибыль: <span id="potentialProfit">0</span> €</div>
-                <div class="finance-item cash">💵 Текущие деньги в кассе: <span id="currentCash">0</span> €</div>
-            </div>
-        </div>
-
-        <!-- Вкладка Касса -->
-        <div id="cash" class="tab-content">
-            <div class="card">
-                <h3>Управление кассой</h3>
-                <label>Начальный остаток:</label>
-                <input type="number" id="initialCash" value="0">
-                
-                <input type="number" id="cashAmount" placeholder="Сумма (€)">
-                <input type="text" id="cashNote" placeholder="Примечание">
-                
-                <div class="cash-buttons">
-                    <button id="addCashBtn" class="green">+ Внести</button>
-                    <button id="withdrawCashBtn" class="red">- Снять</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>История операций</h3>
-                <div id="transactionsList"></div>
-            </div>
+            <div class="stats-note" style="text-align:center; font-size:11px; color:#888; margin-top:8px;">🟢 Сравнение с предыдущим периодом</div>
         </div>
     </div>
 
-    <script>
-        // ========== ДАННЫЕ ==========
-        let categories = [];
-        let cashTransactions = [];
-        let initialCash = 0;
-        let nextCatId = 1;
-        let nextItemId = 1;
-        let nextTransactionId = 1;
-
-        // ========== СОХРАНЕНИЕ ==========
-        function saveData() {
-            localStorage.setItem("warehouseData", JSON.stringify({
-                categories, cashTransactions, initialCash
-            }));
-        }
-
-        function loadData() {
-            const saved = localStorage.getItem("warehouseData");
-            if (saved) {
-                const data = JSON.parse(saved);
-                categories = data.categories;
-                cashTransactions = data.cashTransactions || [];
-                initialCash = data.initialCash || 0;
-                document.getElementById("initialCash").value = initialCash;
-            }
-            renderAll();
-        }
-
-        // ========== ОТРИСОВКА ==========
-        function renderAll() {
-            renderCategories();
-            renderFinances();
-            renderTransactions();
-        }
-
-        function renderCategories() {
-            const container = document.getElementById("categoriesList");
-            let total = 0;
-            
-            if (categories.length === 0) {
-                container.innerHTML = '<div class="empty">Нет категорий. Добавьте первую!</div>';
-                document.getElementById("totalQty").innerText = "0";
-                return;
-            }
-            
-            container.innerHTML = categories.map(cat => {
-                let catTotal = 0;
-                cat.items.forEach(i => catTotal += i.qty);
-                total += catTotal;
-                
-                return `
-                    <div class="category-card">
-                        <div class="category-header">
-                            <h2>${escapeHtml(cat.name)}</h2>
-                            <button class="delete-cat-btn" onclick="deleteCategory(${cat.id})">🗑️</button>
-                        </div>
-                        <div class="add-item-form">
-                            <input type="text" placeholder="Новый товар" id="itemName_${cat.id}">
-                            <input type="number" placeholder="Цена закупки (€)" id="purchasePrice_${cat.id}">
-                            <input type="number" placeholder="Цена продажи (€)" id="salePrice_${cat.id}">
-                            <button onclick="addItem(${cat.id})">+ Добавить товар</button>
-                        </div>
-                        ${cat.items.map(item => `
-                            <div class="item-card">
-                                <div class="item-header">
-                                    <div class="item-name">${escapeHtml(item.name)}</div>
-                                    <button class="delete-item-btn" onclick="deleteItem(${cat.id}, ${item.id})">🗑️</button>
-                                </div>
-                                <div class="item-prices">💰 Закупка: ${item.purchasePrice} € | 💵 Продажа: ${item.salePrice} €</div>
-                                <div class="item-qty">📦 Количество: ${item.qty} шт.</div>
-                                <div class="item-buttons">
-                                    <button onclick="changeQty(${cat.id}, ${item.id}, -1)" ${item.qty === 0 ? 'disabled' : ''}>-</button>
-                                    <button onclick="changeQty(${cat.id}, ${item.id}, 1)">+</button>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                `;
-            }).join('');
-            
-            document.getElementById("totalQty").innerText = total;
-        }
-
-        function renderFinances() {
-            let totalInvested = 0;
-            let totalValue = 0;
-            
-            categories.forEach(cat => {
-                cat.items.forEach(item => {
-                    totalInvested += item.purchasePrice * item.qty;
-                    totalValue += item.salePrice * item.qty;
-                });
-            });
-            
-            const cashAdded = cashTransactions.filter(t => t.type === 'add').reduce((s, t) => s + t.amount, 0);
-            const cashWithdrawn = cashTransactions.filter(t => t.type === 'withdraw').reduce((s, t) => s + t.amount, 0);
-            const currentCash = initialCash + cashAdded - cashWithdrawn;
-            const potentialProfit = totalValue - totalInvested;
-            
-            document.getElementById("totalInvested").innerText = totalInvested.toLocaleString();
-            document.getElementById("totalValue").innerText = totalValue.toLocaleString();
-            document.getElementById("potentialProfit").innerText = potentialProfit.toLocaleString();
-            document.getElementById("currentCash").innerText = currentCash.toLocaleString();
-        }
-
-        function renderTransactions() {
-            const container = document.getElementById("transactionsList");
-            if (cashTransactions.length === 0) {
-                container.innerHTML = "<div class='empty'>Нет операций</div>";
-                return;
-            }
-            
-            container.innerHTML = cashTransactions.map(t => `
-                <div class="transaction ${t.type}">
-                    <div class="transaction-amount">${t.type === 'add' ? '+' : '-'} ${t.amount.toLocaleString()} €</div>
-                    <div class="transaction-note">${escapeHtml(t.note) || '—'}</div>
-                    <div class="transaction-date">${t.date}</div>
-                    <button class="delete-trans" onclick="deleteTransaction(${t.id})">✖</button>
-                </div>
-            `).join('');
-        }
-
-        // ========== ДЕЙСТВИЯ ==========
-        function addCategory() {
-            const input = document.getElementById("catName");
-            const name = input.value.trim();
-            if (name) {
-                categories.push({ id: nextCatId++, name, items: [] });
-                input.value = "";
-                saveData();
-                renderAll();
-            }
-        }
-
-        function deleteCategory(catId) {
-            if (confirm("Удалить категорию и все товары в ней?")) {
-                categories = categories.filter(c => c.id !== catId);
-                saveData();
-                renderAll();
-            }
-        }
-
-        function addItem(catId) {
-            const name = document.getElementById(`itemName_${catId}`).value.trim();
-            const purchasePrice = parseFloat(document.getElementById(`purchasePrice_${catId}`).value);
-            const salePrice = parseFloat(document.getElementById(`salePrice_${catId}`).value);
-            
-            if (name && purchasePrice > 0 && salePrice > 0) {
-                const cat = categories.find(c => c.id === catId);
-                if (cat) {
-                    cat.items.push({
-                        id: nextItemId++,
-                        name,
-                        qty: 0,
-                        purchasePrice,
-                        salePrice
-                    });
-                    document.getElementById(`itemName_${catId}`).value = "";
-                    document.getElementById(`purchasePrice_${catId}`).value = "";
-                    document.getElementById(`salePrice_${catId}`).value = "";
-                    saveData();
-                    renderAll();
-                }
-            } else {
-                alert("Заполните все поля (цена закупки и продажи > 0)");
-            }
-        }
-
-        function deleteItem(catId, itemId) {
-            if (confirm("Удалить этот товар?")) {
-                const cat = categories.find(c => c.id === catId);
-                if (cat) {
-                    cat.items = cat.items.filter(i => i.id !== itemId);
-                    saveData();
-                    renderAll();
-                }
-            }
-        }
-
-        function changeQty(catId, itemId, delta) {
-            const cat = categories.find(c => c.id === catId);
-            if (cat) {
-                const item = cat.items.find(i => i.id === itemId);
-                if (item) {
-                    item.qty = Math.max(0, item.qty + delta);
-                    saveData();
-                    renderAll();
-                }
-            }
-        }
-
-        function addCashTransaction(type) {
-            const amount = parseFloat(document.getElementById("cashAmount").value);
-            const note = document.getElementById("cashNote").value;
-            
-            if (amount > 0) {
-                cashTransactions.unshift({
-                    id: nextTransactionId++,
-                    type,
-                    amount,
-                    note,
-                    date: new Date().toLocaleString()
-                });
-                document.getElementById("cashAmount").value = "";
-                document.getElementById("cashNote").value = "";
-                saveData();
-                renderAll();
-            } else {
-                alert("Введите сумму больше 0");
-            }
-        }
-
-        function deleteTransaction(id) {
-            cashTransactions = cashTransactions.filter(t => t.id !== id);
-            saveData();
-            renderAll();
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-
-        // ========== ВКЛАДКИ ==========
-        function setupTabs() {
-            const btns = document.querySelectorAll(".tab-btn");
-            const contents = document.querySelectorAll(".tab-content");
-            
-            btns.forEach(btn => {
-                btn.addEventListener("click", () => {
-                    const tabId = btn.dataset.tab;
-                    btns.forEach(b => b.classList.remove("active"));
-                    contents.forEach(c => c.classList.remove("active"));
-                    btn.classList.add("active");
-                    document.getElementById(tabId).classList.add("active");
-                });
-            });
-        }
-
-        // ========== ИНИЦИАЛИЗАЦИЯ ==========
-        document.addEventListener("DOMContentLoaded", () => {
-            loadData();
-            setupTabs();
-            
-            document.getElementById("addCategoryBtn").onclick = addCategory;
-            document.getElementById("addCashBtn").onclick = () => addCashTransaction("add");
-            document.getElementById("withdrawCashBtn").onclick = () => addCashTransaction("withdraw");
-            document.getElementById("initialCash").onchange = (e) => {
-                initialCash = parseFloat(e.target.value) || 0;
-                saveData();
-                renderAll();
-            };
-        });
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Складской учёт</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="app">
-        <h1>📦 Складской учёт</h1>
-        
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="inventory">Товары</button>
-            <button class="tab-btn" data-tab="finances">Финансы</button>
-            <button class="tab-btn" data-tab="cash">Касса</button>
-        </div>
-
-        <!-- Вкладка Товары -->
-        <div id="inventory" class="tab-content active">
-            <div class="card">
-                <input type="text" id="catName" placeholder="Новая категория">
-                <button id="addCategoryBtn">+ Добавить категорию</button>
-            </div>
-
-            <div class="total-box">
-                📦 Общий остаток: <span id="totalQty">0</span> шт.
-            </div>
-
-            <div id="categoriesList"></div>
-        </div>
-
-        <!-- Вкладка Финансы -->
-        <div id="finances" class="tab-content">
-            <div class="card">
-                <h2>Финансовый отчёт</h2>
-                <div class="finance-item">💸 Вложено в товары: <span id="totalInvested">0</span> €</div>
-                <div class="finance-item">💰 Потенциальная выручка: <span id="totalValue">0</span> €</div>
-                <div class="finance-item profit">📈 Потенциальная прибыль: <span id="potentialProfit">0</span> €</div>
-                <div class="finance-item cash">💵 Текущие деньги в кассе: <span id="currentCash">0</span> €</div>
-            </div>
-        </div>
-
-        <!-- Вкладка Касса -->
-        <div id="cash" class="tab-content">
-            <div class="card">
-                <h3>Управление кассой</h3>
-                <label>Начальный остаток:</label>
-                <input type="number" id="initialCash" value="0">
-                
-                <input type="number" id="cashAmount" placeholder="Сумма (€)">
-                <input type="text" id="cashNote" placeholder="Примечание">
-                
-                <div class="cash-buttons">
-                    <button id="addCashBtn" class="green">+ Внести</button>
-                    <button id="withdrawCashBtn" class="red">- Снять</button>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3>История операций</h3>
-                <div id="transactionsList"></div>
-            </div>
+    <div id="finances" class="tab-content">
+        <div class="card">
+            <div class="finance-item"><span>💸 Вложено в товары:</span> <span id="totalInvested">0</span> €</div>
+            <div class="finance-item"><span>💰 Потенциальная выручка:</span> <span id="totalValue">0</span> €</div>
+            <div class="finance-item"><span>📈 Потенциальная прибыль:</span> <span id="potentialProfit">0</span> €</div>
+            <div class="finance-item"><span>💵 Деньги в кассе:</span> <span id="currentCash">0</span> €</div>
         </div>
     </div>
 
-    <script>
-        // ========== ДАННЫЕ ==========
-        let categories = [];
-        let cashTransactions = [];
-        let initialCash = 0;
-        let nextCatId = 1;
-        let nextItemId = 1;
-        let nextTransactionId = 1;
+    <div id="cash" class="tab-content">
+        <div class="card">
+            <label>Начальный остаток:</label>
+            <input type="number" id="initialCash" value="0">
+            <input type="number" id="cashAmount" placeholder="Сумма (€)">
+            <input type="text" id="cashNote" placeholder="Примечание">
+            <div style="display:flex; gap:8px;">
+                <button id="addCashBtn" class="green">+ Внести</button>
+                <button id="withdrawCashBtn" class="red">- Снять</button>
+            </div>
+        </div>
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                <h3>📋 История операций</h3>
+                <div style="display:flex; gap:6px;">
+                    <button id="selectAllCashBtn" class="small-btn">Выделить всё</button>
+                    <button id="deleteSelectedCashBtn" class="red small-btn">Удалить</button>
+                </div>
+            </div>
+            <div id="transactionsList" class="transactions-list"></div>
+        </div>
+    </div>
 
-        // ========== СОХРАНЕНИЕ ==========
-        function saveData() {
-            localStorage.setItem("warehouseData", JSON.stringify({
-                categories, cashTransactions, initialCash
-            }));
+    <div id="profit" class="tab-content">
+        <div class="card">
+            <div class="finance-item"><span>💰 Получено от продаж:</span> <span id="totalSalesRevenue">0</span> €</div>
+            <div class="finance-item"><span>📦 Себестоимость:</span> <span id="totalSalesCost">0</span> €</div>
+            <div class="finance-item"><span>🎉 ПРИБЫЛЬ:</span> <span id="realProfit">0</span> €</div>
+        </div>
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <h3>📋 История продаж</h3>
+                <button id="deleteAllSalesBtn" class="red small-btn">Удалить всё</button>
+            </div>
+            <div id="salesHistoryList"></div>
+        </div>
+    </div>
+
+    <div id="calendar" class="tab-content">
+        <div class="card">
+            <h3>📅 Заметки</h3>
+            <input type="date" id="calendarDate">
+            <textarea id="calendarNote" rows="2" placeholder="Текст заметки..."></textarea>
+            <button id="addCalendarNoteBtn" class="green">+ Добавить заметку</button>
+            <div id="calendarNotesList" style="margin-top:14px;"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== ДАННЫЕ ==========
+    let categories = [];
+    let cashTransactions = [];
+    let initialCash = 0;
+    let nextCatId = 1;
+    let nextItemId = 1;
+    let nextTransactionId = 1;
+    let salesHistory = [];
+    let calendarNotes = {};
+    let currentStatPeriod = 'day';
+    let selectedTransactionIds = new Set();
+
+    // ========== СОХРАНЕНИЕ ==========
+    function saveData() {
+        localStorage.setItem("warehouse", JSON.stringify({ categories, cashTransactions, initialCash, salesHistory, calendarNotes }));
+    }
+    function loadData() {
+        let d = localStorage.getItem("warehouse");
+        if (d) {
+            let data = JSON.parse(d);
+            categories = data.categories || [];
+            cashTransactions = data.cashTransactions || [];
+            initialCash = data.initialCash || 0;
+            salesHistory = data.salesHistory || [];
+            calendarNotes = data.calendarNotes || {};
+            document.getElementById("initialCash").value = initialCash;
+        } else {
+            categories = [{ id: 1, name: "Электроника", items: [{ id: 101, name: "Телефон", qty: 10, purchasePrice: 200, salePrice: 350 }] }];
+            nextCatId = 2; nextItemId = 102;
         }
+        renderAll();
+    }
 
-        function loadData() {
-            const saved = localStorage.getItem("warehouseData");
-            if (saved) {
-                const data = JSON.parse(saved);
-                categories = data.categories;
-                cashTransactions = data.cashTransactions || [];
-                initialCash = data.initialCash || 0;
-                document.getElementById("initialCash").value = initialCash;
-            }
-            renderAll();
+    function renderAll() {
+        renderCategories();
+        renderFinances();
+        renderTransactions();
+        renderSalesHistory();
+        renderStats();
+        renderCalendarNotes();
+    }
+
+    function escapeHtml(str) { return String(str).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+
+    // ========== ТОВАРЫ ==========
+    function renderCategories() {
+        let container = document.getElementById("categoriesList");
+        if (!container) return;
+        let totalQty = 0;
+        if (!categories.length) {
+            container.innerHTML = '<div class="card">Нет категорий. Добавьте первую!</div>';
+            document.getElementById("totalQty").innerText = "0";
+            return;
         }
-
-        // ========== ОТРИСОВКА ==========
-        function renderAll() {
-            renderCategories();
-            renderFinances();
-            renderTransactions();
-        }
-
-        function renderCategories() {
-            const container = document.getElementById("categoriesList");
-            let total = 0;
-            
-            if (categories.length === 0) {
-                container.innerHTML = '<div class="empty">Нет категорий. Добавьте первую!</div>';
-                document.getElementById("totalQty").innerText = "0";
-                return;
-            }
-            
-            container.innerHTML = categories.map(cat => {
-                let catTotal = 0;
-                cat.items.forEach(i => catTotal += i.qty);
-                total += catTotal;
-                
-                return `
-                    <div class="category-card">
-                        <div class="category-header">
-                            <h2>${escapeHtml(cat.name)}</h2>
-                            <button class="delete-cat-btn" onclick="deleteCategory(${cat.id})">🗑️</button>
-                        </div>
-                        <div class="add-item-form">
-                            <input type="text" placeholder="Новый товар" id="itemName_${cat.id}">
-                            <input type="number" placeholder="Цена закупки (€)" id="purchasePrice_${cat.id}">
-                            <input type="number" placeholder="Цена продажи (€)" id="salePrice_${cat.id}">
-                            <button onclick="addItem(${cat.id})">+ Добавить товар</button>
-                        </div>
-                        ${cat.items.map(item => `
-                            <div class="item-card">
-                                <div class="item-header">
-                                    <div class="item-name">${escapeHtml(item.name)}</div>
-                                    <button class="delete-item-btn" onclick="deleteItem(${cat.id}, ${item.id})">🗑️</button>
-                                </div>
-                                <div class="item-prices">💰 Закупка: ${item.purchasePrice} € | 💵 Продажа: ${item.salePrice} €</div>
-                                <div class="item-qty">📦 Количество: ${item.qty} шт.</div>
-                                <div class="item-buttons">
-                                    <button onclick="changeQty(${cat.id}, ${item.id}, -1)" ${item.qty === 0 ? 'disabled' : ''}>-</button>
-                                    <button onclick="changeQty(${cat.id}, ${item.id}, 1)">+</button>
-                                </div>
-                            </div>
-                        `).join('')}
+        container.innerHTML = categories.map(cat => {
+            let catTotal = 0;
+            cat.items.forEach(i => catTotal += i.qty);
+            totalQty += catTotal;
+            return `
+                <div class="category-card">
+                    <div class="category-header">
+                        <h2>${escapeHtml(cat.name)}</h2>
+                        <button class="delete-cat-btn red" style="width:32px; padding:4px;" onclick="deleteCategory(${cat.id})">🗑️</button>
                     </div>
-                `;
-            }).join('');
-            
-            document.getElementById("totalQty").innerText = total;
-        }
+                    <div class="add-item-form" style="background:#1a1a1a; border-radius:14px; padding:10px; margin-bottom:12px;">
+                        <input type="text" placeholder="Новый товар" id="itemName_${cat.id}">
+                        <input type="number" placeholder="Цена закупки (€)" id="purchasePrice_${cat.id}">
+                        <input type="number" placeholder="Цена продажи (€)" id="salePrice_${cat.id}">
+                        <button onclick="addItem(${cat.id})">+ Добавить товар</button>
+                    </div>
+                    ${cat.items.map(item => `
+                        <div class="item-card">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <strong>${escapeHtml(item.name)}</strong>
+                                <button class="delete-item-btn red" style="width:28px; padding:4px;" onclick="deleteItem(${cat.id}, ${item.id})">🗑️</button>
+                            </div>
+                            <div style="margin:6px 0;">💰 Закупка: ${item.purchasePrice} € | 💵 Продажа: ${item.salePrice} €</div>
+                            <div>📦 На складе: ${item.qty} шт.</div>
+                            <div class="item-buttons">
+                                <button onclick="changeQty(${cat.id}, ${item.id}, -1, 'sale')" ${item.qty===0 ? 'disabled' : ''}>💸 Продать -1</button>
+                                <button onclick="openDiscountSale(${cat.id}, ${item.id})" ${item.qty===0 ? 'disabled' : ''}>💰 Скидка</button>
+                                <button onclick="changeQty(${cat.id}, ${item.id}, 1, 'purchase')">📦 Закупить +1</button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }).join('');
+        document.getElementById("totalQty").innerText = totalQty;
+    }
 
-        function renderFinances() {
-            let totalInvested = 0;
-            let totalValue = 0;
-            
-            categories.forEach(cat => {
-                cat.items.forEach(item => {
-                    totalInvested += item.purchasePrice * item.qty;
-                    totalValue += item.salePrice * item.qty;
-                });
-            });
-            
-            const cashAdded = cashTransactions.filter(t => t.type === 'add').reduce((s, t) => s + t.amount, 0);
-            const cashWithdrawn = cashTransactions.filter(t => t.type === 'withdraw').reduce((s, t) => s + t.amount, 0);
-            const currentCash = initialCash + cashAdded - cashWithdrawn;
-            const potentialProfit = totalValue - totalInvested;
-            
-            document.getElementById("totalInvested").innerText = totalInvested.toLocaleString();
-            document.getElementById("totalValue").innerText = totalValue.toLocaleString();
-            document.getElementById("potentialProfit").innerText = potentialProfit.toLocaleString();
-            document.getElementById("currentCash").innerText = currentCash.toLocaleString();
+    window.deleteCategory = function(id) {
+        if (confirm("Удалить категорию?")) { categories = categories.filter(c => c.id !== id); saveData(); renderAll(); }
+    };
+    window.addItem = function(catId) {
+        let name = document.getElementById(`itemName_${catId}`).value.trim();
+        let purchasePrice = parseFloat(document.getElementById(`purchasePrice_${catId}`).value);
+        let salePrice = parseFloat(document.getElementById(`salePrice_${catId}`).value);
+        if (!name || purchasePrice<=0 || salePrice<=0) { alert("Заполните все поля"); return; }
+        let cat = categories.find(c => c.id === catId);
+        if (cat) { cat.items.push({ id: nextItemId++, name, qty: 0, purchasePrice, salePrice }); saveData(); renderAll(); }
+    };
+    window.deleteItem = function(catId, itemId) {
+        let cat = categories.find(c => c.id === catId);
+        if (cat) { cat.items = cat.items.filter(i => i.id !== itemId); saveData(); renderAll(); }
+    };
+    window.changeQty = function(catId, itemId, delta, type) {
+        let cat = categories.find(c => c.id === catId);
+        if (!cat) return;
+        let item = cat.items.find(i => i.id === itemId);
+        if (!item || item.qty + delta < 0) return;
+        if (type === 'sale' && delta === -1) {
+            salesHistory.unshift({ id: Date.now(), itemName: item.name, quantity: 1, purchasePrice: item.purchasePrice, salePrice: item.salePrice, date: new Date().toLocaleString(), isDiscounted: false });
+            cashTransactions.unshift({ id: nextTransactionId++, type: 'add', amount: item.salePrice, note: `Продажа: ${item.name}`, date: new Date().toLocaleString() });
         }
-
-        function renderTransactions() {
-            const container = document.getElementById("transactionsList");
-            if (cashTransactions.length === 0) {
-                container.innerHTML = "<div class='empty'>Нет операций</div>";
-                return;
+        if (type === 'purchase' && delta === 1) {
+            cashTransactions.unshift({ id: nextTransactionId++, type: 'withdraw', amount: item.purchasePrice, note: `Закупка: ${item.name}`, date: new Date().toLocaleString() });
+        }
+        item.qty += delta;
+        saveData(); renderAll();
+    };
+    
+    // ========== СКИДКА: ФОРМАТ "количество x общая_сумма" (2x55) ==========
+    window.openDiscountSale = function(catId, itemId) {
+        const cat = categories.find(c => c.id === catId);
+        if (!cat) return;
+        const item = cat.items.find(i => i.id === itemId);
+        if (!item || item.qty <= 0) return;
+        let input = prompt(`💰 СКИДКА: ${item.name}\nДоступно: ${item.qty} шт.\nОбычная цена: ${item.salePrice} €\n\nВведите: КОЛИЧЕСТВО x ОБЩАЯ_СУММА\nПример: 2x55 (2 шт за 55 €)`, `1x${item.salePrice}`);
+        if (!input) return;
+        let parts = input.toLowerCase().split('x');
+        if (parts.length !== 2) { alert("❌ Формат: количество x сумма"); return; }
+        let qty = parseInt(parts[0]);
+        let total = parseFloat(parts[1]);
+        if (isNaN(qty) || qty <= 0 || isNaN(total) || total <= 0) { alert("❌ Неверные значения"); return; }
+        if (qty > item.qty) { alert(`❌ Недостаточно товара! Доступно: ${item.qty} шт.`); return; }
+        let pricePerUnit = total / qty;
+        if (confirm(`Продажа: ${item.name}\n${qty} шт × ${pricePerUnit.toFixed(2)}€ = ${total}€`)) {
+            for (let i = 0; i < qty; i++) {
+                salesHistory.unshift({ id: Date.now()+i, itemName: item.name, quantity: 1, purchasePrice: item.purchasePrice, salePrice: pricePerUnit, date: new Date().toLocaleString(), isDiscounted: true });
             }
-            
-            container.innerHTML = cashTransactions.map(t => `
-                <div class="transaction ${t.type}">
+            cashTransactions.unshift({ id: nextTransactionId++, type: 'add', amount: total, note: `💰 Скидка: ${item.name} ${qty}шт = ${total}€`, date: new Date().toLocaleString() });
+            item.qty -= qty;
+            saveData(); renderAll();
+            alert(`✅ Продано ${qty} шт. на сумму ${total} €`);
+        }
+    };
+
+    function renderFinances() {
+        let invested = 0, value = 0;
+        categories.forEach(cat => cat.items.forEach(item => { invested += item.purchasePrice * item.qty; value += item.salePrice * item.qty; }));
+        let cashIn = cashTransactions.filter(t => t.type === 'add').reduce((s,t)=>s+t.amount,0);
+        let cashOut = cashTransactions.filter(t => t.type === 'withdraw').reduce((s,t)=>s+t.amount,0);
+        let current = initialCash + cashIn - cashOut;
+        document.getElementById("totalInvested").innerText = invested.toLocaleString();
+        document.getElementById("totalValue").innerText = value.toLocaleString();
+        document.getElementById("potentialProfit").innerText = (value-invested).toLocaleString();
+        document.getElementById("currentCash").innerText = current.toLocaleString();
+    }
+
+    function renderTransactions() {
+        let container = document.getElementById("transactionsList");
+        if (!container) return;
+        if (!cashTransactions.length) { container.innerHTML = "<div class='card'>Нет операций</div>"; return; }
+        container.innerHTML = cashTransactions.map(t => `
+            <div class="transaction ${t.type}">
+                <input type="checkbox" class="transaction-checkbox" data-id="${t.id}" ${selectedTransactionIds.has(t.id) ? 'checked' : ''}>
+                <div class="transaction-info">
                     <div class="transaction-amount">${t.type === 'add' ? '+' : '-'} ${t.amount.toLocaleString()} €</div>
                     <div class="transaction-note">${escapeHtml(t.note) || '—'}</div>
                     <div class="transaction-date">${t.date}</div>
-                    <button class="delete-trans" onclick="deleteTransaction(${t.id})">✖</button>
                 </div>
-            `).join('');
-        }
-
-        // ========== ДЕЙСТВИЯ ==========
-        function addCategory() {
-            const input = document.getElementById("catName");
-            const name = input.value.trim();
-            if (name) {
-                categories.push({ id: nextCatId++, name, items: [] });
-                input.value = "";
-                saveData();
-                renderAll();
-            }
-        }
-
-        function deleteCategory(catId) {
-            if (confirm("Удалить категорию и все товары в ней?")) {
-                categories = categories.filter(c => c.id !== catId);
-                saveData();
-                renderAll();
-            }
-        }
-
-        function addItem(catId) {
-            const name = document.getElementById(`itemName_${catId}`).value.trim();
-            const purchasePrice = parseFloat(document.getElementById(`purchasePrice_${catId}`).value);
-            const salePrice = parseFloat(document.getElementById(`salePrice_${catId}`).value);
-            
-            if (name && purchasePrice > 0 && salePrice > 0) {
-                const cat = categories.find(c => c.id === catId);
-                if (cat) {
-                    cat.items.push({
-                        id: nextItemId++,
-                        name,
-                        qty: 0,
-                        purchasePrice,
-                        salePrice
-                    });
-                    document.getElementById(`itemName_${catId}`).value = "";
-                    document.getElementById(`purchasePrice_${catId}`).value = "";
-                    document.getElementById(`salePrice_${catId}`).value = "";
-                    saveData();
-                    renderAll();
-                }
-            } else {
-                alert("Заполните все поля (цена закупки и продажи > 0)");
-            }
-        }
-
-        function deleteItem(catId, itemId) {
-            if (confirm("Удалить этот товар?")) {
-                const cat = categories.find(c => c.id === catId);
-                if (cat) {
-                    cat.items = cat.items.filter(i => i.id !== itemId);
-                    saveData();
-                    renderAll();
-                }
-            }
-        }
-
-        function changeQty(catId, itemId, delta) {
-            const cat = categories.find(c => c.id === catId);
-            if (cat) {
-                const item = cat.items.find(i => i.id === itemId);
-                if (item) {
-                    item.qty = Math.max(0, item.qty + delta);
-                    saveData();
-                    renderAll();
-                }
-            }
-        }
-
-        function addCashTransaction(type) {
-            const amount = parseFloat(document.getElementById("cashAmount").value);
-            const note = document.getElementById("cashNote").value;
-            
-            if (amount > 0) {
-                cashTransactions.unshift({
-                    id: nextTransactionId++,
-                    type,
-                    amount,
-                    note,
-                    date: new Date().toLocaleString()
-                });
-                document.getElementById("cashAmount").value = "";
-                document.getElementById("cashNote").value = "";
-                saveData();
-                renderAll();
-            } else {
-                alert("Введите сумму больше 0");
-            }
-        }
-
-        function deleteTransaction(id) {
-            cashTransactions = cashTransactions.filter(t => t.id !== id);
-            saveData();
-            renderAll();
-        }
-
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-
-        // ========== ВКЛАДКИ ==========
-        function setupTabs() {
-            const btns = document.querySelectorAll(".tab-btn");
-            const contents = document.querySelectorAll(".tab-content");
-            
-            btns.forEach(btn => {
-                btn.addEventListener("click", () => {
-                    const tabId = btn.dataset.tab;
-                    btns.forEach(b => b.classList.remove("active"));
-                    contents.forEach(c => c.classList.remove("active"));
-                    btn.classList.add("active");
-                    document.getElementById(tabId).classList.add("active");
-                });
-            });
-        }
-
-        // ========== ИНИЦИАЛИЗАЦИЯ ==========
-        document.addEventListener("DOMContentLoaded", () => {
-            loadData();
-            setupTabs();
-            
-            document.getElementById("addCategoryBtn").onclick = addCategory;
-            document.getElementById("addCashBtn").onclick = () => addCashTransaction("add");
-            document.getElementById("withdrawCashBtn").onclick = () => addCashTransaction("withdraw");
-            document.getElementById("initialCash").onchange = (e) => {
-                initialCash = parseFloat(e.target.value) || 0;
-                saveData();
-                renderAll();
-            };
+                <button class="delete-trans" onclick="deleteTransaction(${t.id})">✖</button>
+            </div>
+        `).join('');
+        document.querySelectorAll('.transaction-checkbox').forEach(cb => {
+            cb.addEventListener('change', (e) => { let id = parseInt(e.target.dataset.id); if (e.target.checked) selectedTransactionIds.add(id); else selectedTransactionIds.delete(id); });
         });
-    </script>
+    }
+    window.deleteTransaction = function(id) { cashTransactions = cashTransactions.filter(t => t.id !== id); selectedTransactionIds.delete(id); saveData(); renderAll(); };
+    window.selectAllTransactions = function() { cashTransactions.forEach(t => selectedTransactionIds.add(t.id)); renderTransactions(); };
+    window.deleteSelectedTransactions = function() { if (!selectedTransactionIds.size) return alert("Нет выбранных"); cashTransactions = cashTransactions.filter(t => !selectedTransactionIds.has(t.id)); selectedTransactionIds.clear(); saveData(); renderAll(); };
+    window.addCashTransaction = function(type) {
+        let amount = parseFloat(document.getElementById("cashAmount").value);
+        let note = document.getElementById("cashNote").value;
+        if (!amount || amount<=0) { alert("Введите сумму"); return; }
+        cashTransactions.unshift({ id: nextTransactionId++, type, amount, note, date: new Date().toLocaleString() });
+        document.getElementById("cashAmount").value = ""; document.getElementById("cashNote").value = "";
+        saveData(); renderAll();
+    };
+    function addCategory() {
+        let name = document.getElementById("catName").value.trim();
+        if (!name) { alert("Введите название"); return; }
+        categories.push({ id: nextCatId++, name, items: [] });
+        document.getElementById("catName").value = "";
+        saveData(); renderAll();
+    }
+
+    function renderSalesHistory() {
+        let container = document.getElementById("salesHistoryList");
+        if (!container) return;
+        if (!salesHistory.length) { container.innerHTML = "<div class='card'>Нет продаж</div>"; 
+            document.getElementById("totalSalesRevenue").innerText = "0"; document.getElementById("totalSalesCost").innerText = "0"; document.getElementById("realProfit").innerText = "0"; return; }
+        let rev=0, cost=0;
+        container.innerHTML = salesHistory.map(s => {
+            let revenue = s.salePrice * s.quantity;
+            let cst = s.purchasePrice * s.quantity;
+            rev += revenue; cost += cst;
+            return `<div class="sale-item"><div><strong>💰 ${escapeHtml(s.itemName)} x${s.quantity}</strong> — ${revenue} €<br><small>${s.date} ${s.isDiscounted ? '💰 скидка' : ''}</small></div><button class="delete-sale-btn" onclick="deleteSale(${s.id})">✖</button></div>`;
+        }).join('');
+        document.getElementById("totalSalesRevenue").innerText = rev.toLocaleString();
+        document.getElementById("totalSalesCost").innerText = cost.toLocaleString();
+        document.getElementById("realProfit").innerText = (rev-cost).toLocaleString();
+    }
+    window.deleteSale = function(id) { salesHistory = salesHistory.filter(s => s.id !== id); saveData(); renderAll(); };
+    window.deleteAllSales = function() { salesHistory = []; saveData(); renderAll(); };
+
+    function getDateRange(period, base = new Date()) {
+        let start = new Date(base), end = new Date(base);
+        if (period === 'day') { start.setHours(0,0,0,0); end.setHours(23,59,59,999); }
+        else if (period === 'week') { let day = start.getDay(); let diff = start.getDate() - day + (day === 0 ? -6 : 1); start = new Date(start.setDate(diff)); start.setHours(0,0,0,0); end = new Date(start); end.setDate(start.getDate()+6); end.setHours(23,59,59,999); }
+        else { start = new Date(base.getFullYear(), base.getMonth(), 1); end = new Date(base.getFullYear(), base.getMonth()+1, 0); end.setHours(23,59,59,999); }
+        return { start, end };
+    }
+    function getPrevRange(period, base) {
+        let prev = new Date(base);
+        if (period === 'day') prev.setDate(prev.getDate()-1);
+        else if (period === 'week') prev.setDate(prev.getDate()-7);
+        else prev.setMonth(prev.getMonth()-1);
+        return getDateRange(period, prev);
+    }
+    function renderStats() {
+        let today = new Date();
+        let curr = getDateRange(currentStatPeriod, today);
+        let prev = getPrevRange(currentStatPeriod, today);
+        let currRev=0, currCost=0, currCnt=0, prevRev=0, prevCost=0, prevCnt=0;
+        salesHistory.forEach(s => {
+            let d = new Date(s.date);
+            let rev = s.salePrice * s.quantity, cst = s.purchasePrice * s.quantity;
+            if (d >= curr.start && d <= curr.end) { currRev+=rev; currCost+=cst; currCnt+=s.quantity; }
+            if (d >= prev.start && d <= prev.end) { prevRev+=rev; prevCost+=cst; prevCnt+=s.quantity; }
+        });
+        let currProfit = currRev - currCost, prevProfit = prevRev - prevCost;
+        let currAvg = currCnt ? currRev/currCnt : 0, prevAvg = prevCnt ? prevRev/prevCnt : 0;
+        let currMargin = currRev ? (currProfit/currRev)*100 : 0, prevMargin = prevRev ? (prevProfit/prevRev)*100 : 0;
+        let trend = (c,p) => {
+            if (p===0 && c===0) return '<span class="trend-neutral">—</span>';
+            if (p===0) return '<span class="trend-up">▲ +100%</span>';
+            let perc = ((c-p)/p*100).toFixed(1);
+            if (c>p) return `<span class="trend-up">▲ +${perc}%</span>`;
+            if (c<p) return `<span class="trend-down">▼ ${perc}%</span>`;
+            return '<span class="trend-neutral">● 0%</span>';
+        };
+        document.getElementById("statRevenue").innerHTML = currRev.toFixed(2)+' €'; document.getElementById("trendRevenue").innerHTML = trend(currRev, prevRev);
+        document.getElementById("statProfit").innerHTML = currProfit.toFixed(2)+' €'; document.getElementById("trendProfit").innerHTML = trend(currProfit, prevProfit);
+        document.getElementById("statCount").innerHTML = currCnt+' шт'; document.getElementById("trendCount").innerHTML = trend(currCnt, prevCnt);
+        document.getElementById("statAvg").innerHTML = currAvg.toFixed(2)+' €'; document.getElementById("trendAvg").innerHTML = trend(currAvg, prevAvg);
+        document.getElementById("statMargin").innerHTML = currMargin.toFixed(1)+'%'; document.getElementById("trendMargin").innerHTML = trend(currMargin, prevMargin);
+    }
+
+    function renderCalendarNotes() {
+        let container = document.getElementById("calendarNotesList");
+        if (!container) return;
+        let html = '';
+        for (let [date, notes] of Object.entries(calendarNotes)) {
+            html += `<div class="note-item"><div><strong>${date}</strong><br>${notes.map(n=>`• ${escapeHtml(n)}`).join('<br>')}</div><button class="delete-note-btn" onclick="deleteCalendarNote('${date}')">🗑️</button></div>`;
+        }
+        container.innerHTML = html || '<div class="card">Нет заметок</div>';
+    }
+    window.addCalendarNote = function() {
+        let date = document.getElementById("calendarDate").value;
+        let note = document.getElementById("calendarNote").value.trim();
+        if (!date || !note) { alert("Выберите дату и введите заметку"); return; }
+        if (!calendarNotes[date]) calendarNotes[date] = [];
+        calendarNotes[date].push(note);
+        document.getElementById("calendarNote").value = "";
+        saveData(); renderCalendarNotes();
+    };
+    window.deleteCalendarNote = function(date) {
+        if (confirm(`Удалить все заметки за ${date}?`)) {
+            delete calendarNotes[date];
+            saveData(); renderCalendarNotes();
+        }
+    };
+
+    function setupTabs() {
+        document.querySelectorAll(".tab-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+                document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+                btn.classList.add("active");
+                document.getElementById(btn.dataset.tab).classList.add("active");
+                if (btn.dataset.tab === 'stats') renderStats();
+                if (btn.dataset.tab === 'calendar') renderCalendarNotes();
+            });
+        });
+    }
+    function setupPeriod() {
+        document.querySelectorAll(".period-btn").forEach(btn => {
+            btn.addEventListener("click", () => {
+                document.querySelectorAll(".period-btn").forEach(b => b.classList.remove("active"));
+                btn.classList.add("active");
+                currentStatPeriod = btn.dataset.period;
+                renderStats();
+            });
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        loadData();
+        setupTabs();
+        setupPeriod();
+        document.getElementById("addCategoryBtn").onclick = addCategory;
+        document.getElementById("addCashBtn").onclick = () => addCashTransaction("add");
+        document.getElementById("withdrawCashBtn").onclick = () => addCashTransaction("withdraw");
+        document.getElementById("initialCash").onchange = (e) => { initialCash = parseFloat(e.target.value) || 0; saveData(); renderAll(); };
+        document.getElementById("deleteAllSalesBtn").onclick = deleteAllSales;
+        document.getElementById("selectAllCashBtn").onclick = selectAllTransactions;
+        document.getElementById("deleteSelectedCashBtn").onclick = deleteSelectedTransactions;
+        document.getElementById("addCalendarNoteBtn").onclick = addCalendarNote;
+        renderAll();
+    });
+</script>
 </body>
 </html>
