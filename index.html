@@ -288,7 +288,6 @@
 <div class="app">
     <h1>📦 Varastonhallinta</h1>
 
-    <!-- Первая строка вкладок: 5 штук -->
     <div class="tabs-row">
         <button class="tab-btn active" data-tab="inventory">📦 Товары</button>
         <button class="tab-btn" data-tab="stats">📊 Статистика</button>
@@ -296,12 +295,10 @@
         <button class="tab-btn" data-tab="cash">💵 Касса</button>
         <button class="tab-btn" data-tab="profit">📈 Прибыль</button>
     </div>
-    <!-- Вторая строка: Календарь -->
     <div class="tabs-row">
         <button class="tab-btn" data-tab="calendar">📅 Календарь</button>
     </div>
 
-    <!-- Товары -->
     <div id="inventory" class="tab-content active">
         <div class="card">
             <input type="text" id="catName" placeholder="Новая категория">
@@ -311,13 +308,12 @@
         <div id="categoriesList"></div>
     </div>
 
-    <!-- Статистика -->
     <div id="stats" class="tab-content">
         <div class="card">
             <div class="period-selector">
-                <button class="period-btn active" data-period="day">📅 День</button>
-                <button class="period-btn" data-period="week">📆 Неделя</button>
-                <button class="period-btn" data-period="month">📆 Месяц</button>
+                <button class="period-btn active" data-period="day">День</button>
+                <button class="period-btn" data-period="week">Неделя</button>
+                <button class="period-btn" data-period="month">Месяц</button>
             </div>
             <div class="chart-container">
                 <div id="chartBars" class="chart-bars"></div>
@@ -333,7 +329,6 @@
         </div>
     </div>
 
-    <!-- Финансы -->
     <div id="finances" class="tab-content">
         <div class="card">
             <div class="finance-item"><span>💸 Вложено в товары:</span> <span id="totalInvested">0</span> €</div>
@@ -343,7 +338,6 @@
         </div>
     </div>
 
-    <!-- Касса -->
     <div id="cash" class="tab-content">
         <div class="card">
             <label>Начальный остаток:</label>
@@ -364,7 +358,6 @@
         </div>
     </div>
 
-    <!-- Прибыль -->
     <div id="profit" class="tab-content">
         <div class="card">
             <div class="finance-item"><span>💰 Получено от продаж:</span> <span id="totalSalesRevenue">0</span> €</div>
@@ -380,7 +373,6 @@
         </div>
     </div>
 
-    <!-- Календарь -->
     <div id="calendar" class="tab-content">
         <div class="card">
             <h3>📅 Заметки</h3>
@@ -393,7 +385,6 @@
 </div>
 
 <script>
-    // ========== ДАННЫЕ ==========
     let categories = [];
     let cashTransactions = [];
     let initialCash = 0;
@@ -404,13 +395,10 @@
     let calendarNotes = {};
     let currentStatPeriod = 'day';
 
-    // ========== СОХРАНЕНИЕ И ЗАГРУЗКА ==========
     function save() {
-        localStorage.setItem("warehouse", JSON.stringify({ 
-            categories, cashTransactions, initialCash, salesHistory, calendarNotes 
-        }));
+        localStorage.setItem("warehouse", JSON.stringify({ categories, cashTransactions, initialCash, salesHistory, calendarNotes }));
     }
-    
+
     function load() {
         let d = localStorage.getItem("warehouse");
         if (d) {
@@ -422,20 +410,7 @@
             calendarNotes = data.calendarNotes || {};
             document.getElementById("initialCash").value = initialCash;
         } else {
-            // Стартовые данные для примера
-            categories = [{ 
-                id: 1, 
-                name: "Электроника", 
-                items: [{ 
-                    id: 101, 
-                    name: "Телефон", 
-                    qty: 10, 
-                    purchasePrice: 200, 
-                    salePrice: 350 
-                }] 
-            }];
-            nextCatId = 2;
-            nextItemId = 102;
+            categories = [{ id: 1, name: "Электроника", items: [{ id: 101, name: "Телефон", qty: 10, purchasePrice: 200, salePrice: 350 }] }];
         }
         renderAll();
     }
@@ -453,7 +428,6 @@
         return String(str).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); 
     }
 
-    // ========== ТОВАРЫ ==========
     function renderCategories() {
         let container = document.getElementById("categoriesList");
         if (!container) return;
@@ -546,7 +520,6 @@
         let item = cat.items.find(i => i.id === itemId);
         if (!item || item.qty <= 0) return;
         
-        // Добавляем продажу в историю
         salesHistory.unshift({ 
             id: Date.now(), 
             itemName: item.name, 
@@ -557,7 +530,6 @@
             isDiscounted: false 
         });
         
-        // Добавляем операцию в кассу
         cashTransactions.unshift({ 
             id: nextTransactionId++, 
             type: 'add', 
@@ -568,7 +540,7 @@
         
         item.qty--;
         save();
-        renderAll(); // ← полностью обновляет страницу, включая статистику
+        renderAll();
     };
     
     window.buyItem = function(catId, itemId, qty) {
@@ -640,7 +612,6 @@
         }
     };
 
-    // ========== ФИНАНСЫ ==========
     function renderFinances() {
         let invested = 0, value = 0;
         categories.forEach(cat => {
@@ -659,7 +630,6 @@
         document.getElementById("currentCash").innerText = current.toLocaleString();
     }
 
-    // ========== КАССА ==========
     function renderTransactions() {
         let container = document.getElementById("transactionsList");
         if (!container) return;
@@ -723,7 +693,6 @@
         renderAll();
     }
 
-    // ========== ПРИБЫЛЬ ==========
     function renderSalesHistory() {
         let container = document.getElementById("salesHistoryList");
         if (!container) return;
@@ -765,7 +734,6 @@
         renderAll(); 
     };
 
-    // ========== СТАТИСТИКА ==========
     function getDateRange(period, base = new Date()) {
         let start = new Date(base), end = new Date(base);
         if (period === 'day') { 
@@ -798,11 +766,12 @@
     }
     
     function renderStats() {
+        console.log("renderStats вызван, salesHistory.length =", salesHistory.length);
+        
         let now = new Date();
         let curr = getDateRange(currentStatPeriod, now);
         let prev = getPrevRange(currentStatPeriod, now);
         
-        // Данные для графика
         let chartData = [];
         if (currentStatPeriod === 'day') {
             for (let h = 0; h < 24; h++) chartData.push({ label: h+'ч', value: 0 });
@@ -827,7 +796,6 @@
                 currCost += cst;
                 currCnt += s.quantity;
                 
-                // Заполнение графика
                 if (currentStatPeriod === 'day') {
                     let hour = d.getHours();
                     if (hour >= 0 && hour < 24) chartData[hour].value += rev;
@@ -847,7 +815,6 @@
             }
         });
         
-        // Отрисовка графика
         let maxValue = Math.max(...chartData.map(d => d.value), 1);
         let chartHtml = '';
         for (let i = 0; i < chartData.length; i++) {
@@ -862,7 +829,6 @@
         }
         document.getElementById("chartBars").innerHTML = chartHtml;
         
-        // KPI показатели
         let currProfit = currRev - currCost;
         let prevProfit = prevRev - prevCost;
         let currAvg = currCnt ? currRev / currCnt : 0;
@@ -891,7 +857,6 @@
         document.getElementById("trendMargin").innerHTML = tr(currMargin, prevMargin);
     }
 
-    // ========== КАЛЕНДАРЬ ==========
     function renderCalendar() {
         let container = document.getElementById("calendarNotesList");
         if (!container) return;
@@ -927,7 +892,6 @@
         }
     };
 
-    // ========== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ==========
     function setupTabs() {
         document.querySelectorAll(".tab-btn").forEach(btn => {
             btn.addEventListener("click", () => {
