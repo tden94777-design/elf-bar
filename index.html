@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -6,72 +5,173 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Varastonhallinta</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #0a0a0a;
             color: #fff;
             padding: 16px;
         }
-        .app { max-width: 550px; margin: 0 auto; }
-        h1 { text-align: center; font-size: 26px; margin-bottom: 20px; }
-        
-        /* Вкладки - 2 ряда, растянутые */
-        .tabs-row { display: flex; gap: 8px; margin-bottom: 8px; }
-        .tabs-row:last-child { margin-bottom: 20px; }
-        .tab-btn {
-            background: #1e1e2e; border: none; color: #ccc; padding: 10px 0;
-            border-radius: 40px; font-size: 13px; font-weight: 500; cursor: pointer;
-            flex: 1; text-align: center;
+        .app {
+            max-width: 550px;
+            margin: 0 auto;
         }
-        .tab-btn.active { background: #3b82f6; color: white; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            margin-bottom: 20px;
+        }
+        .tabs-row {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .tabs-row:last-child {
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            background: #1e1e2e;
+            border: none;
+            color: #ccc;
+            padding: 10px 0;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            flex: 1;
+            text-align: center;
+        }
+        .tab-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
         .card {
-            background: #121212; border-radius: 20px; padding: 16px; margin-bottom: 16px;
+            background: #121212;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 16px;
             border: 1px solid #2a2a2a;
         }
         input, button, textarea {
-            width: 100%; padding: 10px; margin-bottom: 10px; background: #1e1e2e;
-            border: 1px solid #2a2a2a; border-radius: 14px; color: white;
-            font-size: 14px; text-align: center;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #1e1e2e;
+            border: 1px solid #2a2a2a;
+            border-radius: 14px;
+            color: white;
+            font-size: 14px;
+            text-align: center;
         }
-        button { background: #3b82f6; border: none; font-weight: 600; cursor: pointer; }
+        button {
+            background: #3b82f6;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
         button:active { transform: scale(0.97); }
         .green { background: #10b981; }
         .red { background: #ef4444; }
         .orange { background: #f59e0b; }
-        .small-btn { width: auto; padding: 6px 14px; font-size: 12px; }
-        
+        .small-btn {
+            width: auto;
+            padding: 6px 14px;
+            font-size: 12px;
+        }
         .category-card {
-            background: #121212; border-radius: 18px; padding: 14px; margin-bottom: 14px;
+            background: #121212;
+            border-radius: 18px;
+            padding: 14px;
+            margin-bottom: 14px;
             border: 1px solid #2a2a2a;
         }
-        .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .category-header h2 { font-size: 18px; border-left: 3px solid #3b82f6; padding-left: 10px; }
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .category-header h2 {
+            font-size: 18px;
+            border-left: 3px solid #3b82f6;
+            padding-left: 10px;
+        }
         .delete-cat-btn {
-            background: #ef4444; border: none; width: 32px; height: 32px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px;
+            background: #ef4444;
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
         }
         .item-card {
-            background: #1a1a1a; border-radius: 14px; padding: 12px; margin-bottom: 10px; text-align: center;
+            background: #1a1a1a;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 10px;
+            text-align: center;
         }
         .item-buttons {
-            display: flex; gap: 8px; margin-top: 10px; justify-content: center; flex-wrap: wrap;
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
-        .item-buttons button { margin: 0; padding: 8px; font-size: 12px; flex: 1; min-width: 70px; }
+        .item-buttons button {
+            margin: 0;
+            padding: 8px;
+            font-size: 12px;
+            flex: 1;
+            min-width: 70px;
+        }
         .delete-item-btn {
-            background: #ef4444; border: none; width: 28px; height: 28px; border-radius: 8px;
-            display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px;
+            background: #ef4444;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
         }
-        .finance-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #2a2a2a; }
+        .finance-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #2a2a2a;
+        }
         .finance-item:last-child { border: none; }
-        
-        .transactions-list { max-height: 350px; overflow-y: auto; }
+        .transactions-list {
+            max-height: 350px;
+            overflow-y: auto;
+        }
         .transaction {
-            display: flex; align-items: center; gap: 10px; background: #1a1a1a; padding: 10px;
-            border-radius: 14px; margin-bottom: 8px; border-left: 3px solid;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 14px;
+            margin-bottom: 8px;
+            border-left: 3px solid;
         }
         .transaction.add { border-left-color: #10b981; }
         .transaction.withdraw { border-left-color: #ef4444; }
@@ -80,42 +180,102 @@
         .transaction-note { font-size: 11px; color: #aaa; text-align: left; }
         .transaction-date { font-size: 9px; color: #666; text-align: left; }
         .delete-trans, .delete-sale-btn, .delete-note-btn {
-            background: #ef4444; width: 30px; height: 30px; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center; font-size: 13px; cursor: pointer;
+            background: #ef4444;
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            cursor: pointer;
         }
         .sale-item {
-            display: flex; justify-content: space-between; align-items: center; background: #1a1a1a;
-            padding: 10px; border-radius: 14px; margin-bottom: 8px; border-left: 3px solid #10b981;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #1a1a1a;
+            padding: 10px;
+            border-radius: 14px;
+            margin-bottom: 8px;
+            border-left: 3px solid #10b981;
         }
         .total-box {
-            background: #1a3a5c; text-align: center; padding: 12px; border-radius: 18px;
-            margin-bottom: 16px; font-weight: bold;
+            background: #1a3a5c;
+            text-align: center;
+            padding: 12px;
+            border-radius: 18px;
+            margin-bottom: 16px;
+            font-weight: bold;
         }
-        
-        .chart-container { margin: 20px 0; overflow-x: auto; }
-        .chart-bars { display: flex; gap: 8px; align-items: flex-end; min-width: 300px; padding: 10px 0; }
-        .chart-bar-wrapper { flex: 1; text-align: center; }
+        .chart-container {
+            margin: 20px 0;
+            overflow-x: auto;
+        }
+        .chart-bars {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+            min-width: 300px;
+            padding: 10px 0;
+        }
+        .chart-bar-wrapper {
+            flex: 1;
+            text-align: center;
+        }
         .chart-bar {
             background: linear-gradient(180deg, #3b82f6, #1e3a5f);
-            border-radius: 8px 8px 4px 4px; min-height: 4px; transition: height 0.3s ease;
+            border-radius: 8px 8px 4px 4px;
+            min-height: 4px;
+            transition: height 0.3s ease;
         }
-        .chart-label { font-size: 10px; color: #888; margin-top: 6px; }
-        .chart-value { font-size: 10px; font-weight: bold; color: #3b82f6; margin-bottom: 4px; }
-        
-        .kpi-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 16px; }
+        .chart-label {
+            font-size: 10px;
+            color: #888;
+            margin-top: 6px;
+        }
+        .chart-value {
+            font-size: 10px;
+            font-weight: bold;
+            color: #3b82f6;
+            margin-bottom: 4px;
+        }
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 16px;
+        }
         .kpi-card {
-            background: #1a1a1a; border-radius: 16px; padding: 12px; text-align: center;
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 12px;
+            text-align: center;
             border: 1px solid #2a2a2a;
         }
-        .kpi-value { font-size: 20px; font-weight: 700; margin: 5px 0; }
-        
-        .period-selector { display: flex; gap: 8px; justify-content: center; margin-bottom: 16px; }
-        .period-btn {
-            background: #1e1e2e; padding: 6px 16px; border-radius: 30px; font-size: 12px;
-            cursor: pointer; border: none; color: white;
+        .kpi-value {
+            font-size: 20px;
+            font-weight: 700;
+            margin: 5px 0;
         }
-        .period-btn.active { background: #3b82f6; }
-        
+        .period-selector {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .period-btn {
+            background: #1e1e2e;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 12px;
+            cursor: pointer;
+            border: none;
+            color: white;
+        }
+        .period-btn.active {
+            background: #3b82f6;
+        }
         @media (max-width: 480px) {
             .tab-btn { font-size: 12px; padding: 8px 0; }
             .item-buttons { flex-direction: column; }
@@ -128,7 +288,6 @@
 <div class="app">
     <h1>📦 Varastonhallinta</h1>
 
-    <!-- 1-й ряд: 5 вкладок -->
     <div class="tabs-row">
         <button class="tab-btn active" data-tab="inventory">📦 Товары</button>
         <button class="tab-btn" data-tab="stats">📊 Статистика</button>
@@ -136,12 +295,10 @@
         <button class="tab-btn" data-tab="cash">💵 Касса</button>
         <button class="tab-btn" data-tab="profit">📈 Прибыль</button>
     </div>
-    <!-- 2-й ряд: Календарь отдельно -->
     <div class="tabs-row">
         <button class="tab-btn" data-tab="calendar">📅 Календарь</button>
     </div>
 
-    <!-- Товары -->
     <div id="inventory" class="tab-content active">
         <div class="card">
             <input type="text" id="catName" placeholder="Новая категория">
@@ -151,7 +308,6 @@
         <div id="categoriesList"></div>
     </div>
 
-    <!-- Статистика -->
     <div id="stats" class="tab-content">
         <div class="card">
             <div class="period-selector">
@@ -171,7 +327,6 @@
         </div>
     </div>
 
-    <!-- Финансы -->
     <div id="finances" class="tab-content">
         <div class="card">
             <div class="finance-item"><span>💸 Вложено в товары:</span> <span id="totalInvested">0</span> €</div>
@@ -181,7 +336,6 @@
         </div>
     </div>
 
-    <!-- Касса -->
     <div id="cash" class="tab-content">
         <div class="card">
             <label>Начальный остаток:</label>
@@ -202,7 +356,6 @@
         </div>
     </div>
 
-    <!-- Прибыль -->
     <div id="profit" class="tab-content">
         <div class="card">
             <div class="finance-item"><span>💰 Получено от продаж:</span> <span id="totalSalesRevenue">0</span> €</div>
@@ -218,7 +371,6 @@
         </div>
     </div>
 
-    <!-- Календарь -->
     <div id="calendar" class="tab-content">
         <div class="card">
             <h3>📅 Заметки</h3>
@@ -231,7 +383,6 @@
 </div>
 
 <script>
-    // ========== ДАННЫЕ ==========
     let categories = [];
     let cashTransactions = [];
     let initialCash = 0;
@@ -242,10 +393,10 @@
     let calendarNotes = {};
     let currentStatPeriod = 'day';
 
-    // ========== СОХРАНЕНИЕ ==========
     function save() {
         localStorage.setItem("warehouse", JSON.stringify({ categories, cashTransactions, initialCash, salesHistory, calendarNotes }));
     }
+
     function load() {
         let d = localStorage.getItem("warehouse");
         if (d) {
@@ -273,7 +424,6 @@
 
     function escapeHtml(str) { return String(str).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
 
-    // ========== ТОВАРЫ ==========
     function renderCategories() {
         let container = document.getElementById("categoriesList");
         if (!container) return;
@@ -344,7 +494,8 @@
         salesHistory.unshift({ id: Date.now(), itemName: item.name, quantity: 1, purchasePrice: item.purchasePrice, salePrice: item.salePrice, date: new Date().toLocaleString(), isDiscounted: false });
         cashTransactions.unshift({ id: nextTransactionId++, type: 'add', amount: item.salePrice, note: `Продажа: ${item.name}`, date: new Date().toLocaleString() });
         item.qty--;
-        save(); renderAll();
+        save();
+        renderAll(); // ← СТАТИСТИКА ОБНОВЛЯЕТСЯ
     };
     window.buyItem = function(catId, itemId, qty) {
         let cat = categories.find(c => c.id === catId);
@@ -354,7 +505,8 @@
         let totalCost = item.purchasePrice * qty;
         cashTransactions.unshift({ id: nextTransactionId++, type: 'withdraw', amount: totalCost, note: `Закупка: ${item.name} x${qty}`, date: new Date().toLocaleString() });
         item.qty += qty;
-        save(); renderAll();
+        save();
+        renderAll();
     };
     window.discountSale = function(catId, itemId) {
         let cat = categories.find(c => c.id === catId);
@@ -375,12 +527,12 @@
             }
             cashTransactions.unshift({ id: nextTransactionId++, type: 'add', amount: total, note: `Скидка: ${item.name} ${qty}шт = ${total}€`, date: new Date().toLocaleString() });
             item.qty -= qty;
-            save(); renderAll();
+            save();
+            renderAll();
             alert(`✅ Продано ${qty} шт. на сумму ${total} €`);
         }
     };
 
-    // ========== ФИНАНСЫ ==========
     function renderFinances() {
         let invested = 0, value = 0;
         categories.forEach(cat => cat.items.forEach(item => { invested += item.purchasePrice * item.qty; value += item.salePrice * item.qty; }));
@@ -393,7 +545,6 @@
         document.getElementById("currentCash").innerText = current.toLocaleString();
     }
 
-    // ========== КАССА ==========
     function renderTransactions() {
         let container = document.getElementById("transactionsList");
         if (!container) return;
@@ -427,7 +578,6 @@
         save(); renderAll();
     }
 
-    // ========== ПРИБЫЛЬ ==========
     function renderSalesHistory() {
         let container = document.getElementById("salesHistoryList");
         if (!container) return;
@@ -447,7 +597,6 @@
     window.deleteSale = function(id) { salesHistory = salesHistory.filter(s => s.id !== id); save(); renderAll(); };
     window.deleteAllSales = function() { salesHistory = []; save(); renderAll(); };
 
-    // ========== СТАТИСТИКА ==========
     function getDateRange(period, base = new Date()) {
         let start = new Date(base), end = new Date(base);
         if (period === 'day') { start.setHours(0,0,0,0); end.setHours(23,59,59,999); }
@@ -468,7 +617,6 @@
         let curr = getDateRange(currentStatPeriod, now);
         let prev = getPrevRange(currentStatPeriod, now);
         
-        // Данные для графика
         let chartData = [];
         if (currentStatPeriod === 'day') {
             for (let h = 0; h < 24; h++) chartData.push({ label: h+'ч', value: 0 });
@@ -492,7 +640,6 @@
                 currRev += rev;
                 currCost += cst;
                 currCnt += s.quantity;
-                // Заполнение графика
                 if (currentStatPeriod === 'day') {
                     let hour = d.getHours();
                     if (hour >= 0 && hour < 24) chartData[hour].value += rev;
@@ -512,7 +659,6 @@
             }
         });
         
-        // Отрисовка графика
         let maxValue = Math.max(...chartData.map(d => d.value), 1);
         let chartHtml = '';
         for (let i = 0; i < chartData.length; i++) {
@@ -555,13 +701,12 @@
         document.getElementById("trendMargin").innerHTML = tr(currMargin, prevMargin);
     }
 
-    // ========== КАЛЕНДАРЬ ==========
     function renderCalendar() {
         let container = document.getElementById("calendarNotesList");
         if (!container) return;
         let html = '';
         for (let [date, notes] of Object.entries(calendarNotes)) {
-            html += `<div class="note-item" style="background:#1a1a1a; border-radius:14px; padding:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;"><div><strong>${date}</strong><br>${notes.map(n=>`• ${escapeHtml(n)}`).join('<br>')}</div><button class="delete-note-btn" onclick="deleteCalendarNote('${date}')">✖</button></div>`;
+            html += `<div style="background:#1a1a1a; border-radius:14px; padding:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;"><div><strong>${date}</strong><br>${notes.map(n=>`• ${escapeHtml(n)}`).join('<br>')}</div><button class="delete-note-btn" onclick="deleteCalendarNote('${date}')">✖</button></div>`;
         }
         container.innerHTML = html || '<div class="card">Нет заметок</div>';
     }
@@ -578,7 +723,6 @@
         if (confirm(`Удалить заметки за ${date}?`)) { delete calendarNotes[date]; save(); renderCalendar(); }
     };
 
-    // ========== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ==========
     function setupTabs() {
         document.querySelectorAll(".tab-btn").forEach(btn => {
             btn.addEventListener("click", () => {
@@ -618,4 +762,3 @@
 </script>
 </body>
 </html>
-```
