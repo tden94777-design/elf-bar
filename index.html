@@ -26,24 +26,25 @@
             font-size: 26px;
             margin-bottom: 20px;
         }
-        .tabs {
+        /* Вкладки - 2 ряда, растянуты по ширине */
+        .tabs-row {
             display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .tabs-row:last-child {
             margin-bottom: 20px;
-            justify-content: center;
         }
         .tab-btn {
             background: #1e1e2e;
             border: none;
             color: #ccc;
-            padding: 8px 12px;
+            padding: 10px 0;
             border-radius: 40px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 500;
             cursor: pointer;
             flex: 1;
-            min-width: 65px;
             text-align: center;
         }
         .tab-btn.active {
@@ -277,7 +278,7 @@
             background: #3b82f6;
         }
         @media (max-width: 480px) {
-            .tab-btn { font-size: 11px; padding: 6px 8px; min-width: 55px; }
+            .tab-btn { font-size: 12px; padding: 8px 0; }
             .item-buttons { flex-direction: column; }
             .item-buttons button { min-width: 100%; }
             .chart-bar-wrapper { min-width: 35px; }
@@ -288,12 +289,16 @@
 <div class="app">
     <h1>📦 Varastonhallinta</h1>
 
-    <div class="tabs">
+    <!-- Ряд 1: Товары, Статистика, Финансы, Касса, Прибыль -->
+    <div class="tabs-row">
         <button class="tab-btn active" data-tab="inventory">📦 Товары</button>
         <button class="tab-btn" data-tab="stats">📊 Статистика</button>
         <button class="tab-btn" data-tab="finances">💰 Финансы</button>
         <button class="tab-btn" data-tab="cash">💵 Касса</button>
         <button class="tab-btn" data-tab="profit">📈 Прибыль</button>
+    </div>
+    <!-- Ряд 2: Календарь (отдельная строка) -->
+    <div class="tabs-row">
         <button class="tab-btn" data-tab="calendar">📅 Календарь</button>
     </div>
 
@@ -703,54 +708,4 @@
         container.innerHTML = html || '<div class="card">Нет заметок</div>';
     }
     window.addCalendarNote = function() {
-        let date = document.getElementById("calendarDate").value;
-        let note = document.getElementById("calendarNote").value.trim();
-        if (!date || !note) { alert("Выберите дату и заметку"); return; }
-        if (!calendarNotes[date]) calendarNotes[date] = [];
-        calendarNotes[date].push(note);
-        document.getElementById("calendarNote").value = "";
-        save(); renderCalendar();
-    };
-    window.deleteCalendarNote = function(date) {
-        if (confirm(`Удалить заметки за ${date}?`)) { delete calendarNotes[date]; save(); renderCalendar(); }
-    };
-
-    function setupTabs() {
-        document.querySelectorAll(".tab-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
-                document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-                document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
-                btn.classList.add("active");
-                document.getElementById(btn.dataset.tab).classList.add("active");
-                if (btn.dataset.tab === 'stats') renderStatsWithChart();
-                if (btn.dataset.tab === 'calendar') renderCalendar();
-            });
-        });
-    }
-    function setupPeriod() {
-        document.querySelectorAll(".period-btn").forEach(btn => {
-            btn.addEventListener("click", () => {
-                document.querySelectorAll(".period-btn").forEach(b => b.classList.remove("active"));
-                btn.classList.add("active");
-                currentStatPeriod = btn.dataset.period;
-                renderStatsWithChart();
-            });
-        });
-    }
-
-    document.addEventListener("DOMContentLoaded", () => {
-        load();
-        setupTabs();
-        setupPeriod();
-        document.getElementById("addCategoryBtn").onclick = addCategory;
-        document.getElementById("addCashBtn").onclick = () => addCashTransaction("add");
-        document.getElementById("withdrawCashBtn").onclick = () => addCashTransaction("withdraw");
-        document.getElementById("initialCash").onchange = (e) => { initialCash = parseFloat(e.target.value) || 0; save(); renderAll(); };
-        document.getElementById("deleteAllSalesBtn").onclick = deleteAllSales;
-        document.getElementById("deleteAllCashBtn").onclick = deleteAllCash;
-        document.getElementById("addCalendarNoteBtn").onclick = addCalendarNote;
-        renderAll();
-    });
-</script>
-</body>
-</html>
+        let date = document.getElementById("
