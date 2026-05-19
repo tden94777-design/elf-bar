@@ -426,24 +426,6 @@
                     salePrice: 350 
                 }] 
             }];
-            // Добавляем тестовую продажу, чтобы статистика не была пустой
-            salesHistory = [{
-                id: Date.now(),
-                itemName: "Телефон",
-                quantity: 1,
-                purchasePrice: 200,
-                salePrice: 350,
-                date: new Date().toLocaleString(),
-                isDiscounted: false
-            }];
-            cashTransactions = [{
-                id: nextTransactionId++,
-                type: 'add',
-                amount: 350,
-                note: "Продажа: Телефон",
-                date: new Date().toLocaleString()
-            }];
-            categories[0].items[0].qty = 9;
         }
         renderAll();
     }
@@ -555,7 +537,7 @@
         let item = cat.items.find(i => i.id === itemId);
         if (!item || item.qty <= 0) return;
         
-        // Добавляем продажу
+        // Добавляем продажу в историю
         salesHistory.unshift({ 
             id: Date.now(), 
             itemName: item.name, 
@@ -566,7 +548,7 @@
             isDiscounted: false 
         });
         
-        // Добавляем в кассу
+        // Добавляем деньги в кассу
         cashTransactions.unshift({ 
             id: nextTransactionId++, 
             type: 'add', 
@@ -577,7 +559,7 @@
         
         item.qty--;
         save();
-        renderAll(); // ← полностью обновляет всё
+        renderAll(); // ← полностью обновляет всё, включая статистику
         alert(`✅ Продано: ${item.name} за ${item.salePrice} €`);
     };
     
@@ -776,7 +758,7 @@
         renderAll(); 
     };
 
-    // ========== СТАТИСТИКА (полностью переписана) ==========
+    // ========== СТАТИСТИКА ==========
     function getDateRange(period, baseDate = new Date()) {
         let start = new Date(baseDate);
         let end = new Date(baseDate);
@@ -836,13 +818,11 @@
             let revenue = sale.salePrice * sale.quantity;
             let cost = sale.purchasePrice * sale.quantity;
             
-            // Текущий период
             if (saleDate >= currRange.start && saleDate <= currRange.end) {
                 currRev += revenue;
                 currCost += cost;
                 currCnt += sale.quantity;
                 
-                // Заполнение графика
                 if (currentStatPeriod === 'day') {
                     let hour = saleDate.getHours();
                     if (hour >= 0 && hour < 24) chartData[hour].value += revenue;
@@ -856,7 +836,6 @@
                 }
             }
             
-            // Предыдущий период
             if (saleDate >= prevRange.start && saleDate <= prevRange.end) {
                 prevRev += revenue;
                 prevCost += cost;
